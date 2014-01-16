@@ -1,0 +1,48 @@
+# Disallow internet access for protected filetypes.
+<FilesMatch "\.(inc.php|py|sh|bak|sql|nodes)$">
+Order allow,deny
+</FilesMatch>
+
+# Prevent directory listings from showing.
+Options -Indexes
+
+RewriteEngine on
+
+# Handle https without looping
+RewriteRule ^ - [E=protossl]
+RewriteCond %{HTTPS} on
+RewriteRule ^ - [E=protossl:s]
+
+# Redirect URL addresses to index.php unless a
+# file or directory matches the location
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_URI} !=/favicon.ico
+RewriteRule ^ index.php [L]
+
+RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+RewriteRule ^ http%{ENV:protossl}://%1%{REQUEST_URI} [L,R=301]
+
+# Gzip compression (Requires mod_rewrite and mod_headers)
+<IfModule mod_headers.c>
+    # If the client accepts gzip and css gzip exist, server compressed
+    RewriteCond %{HTTP:Accept-encoding} gzip
+    RewriteCond %{REQUEST_FILENAME}\.gz -s
+    RewriteRule ^(.*)\.css $1\.css\.gz [QSA]
+
+    # If the client accepts gzip and js gzip exist, server compressed
+    RewriteCond %{HTTP:Accept-encoding} gzip
+    RewriteCond %{REQUEST_FILENAME}\.gz -s
+    RewriteRule ^(.*)\.js $1\.js\.gz [QSA]
+
+    # Preserve content types and prevent mod_deflate from compressing twice.
+    RewriteRule \.css\.gz$ - [T=text/css,E=no-gzip:1]
+    RewriteRule \.js\.gz$ - [T=text/javascript,E=no-gzip:1]
+
+    <FilesMatch "(\.js\.gz|\.css\.gz)$">
+      # Serve the correct encoding type.
+      Header append Content-Encoding gzip
+      # Force proxies to cache gzipped & non-gzipped files separately.
+      Header append Vary Accept-Encoding
+    </FilesMatch>
+</IfModule>
