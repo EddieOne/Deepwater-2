@@ -31,6 +31,8 @@ class pre extends node{
 		$result = $this->node->execute("INSERT INTO sites SET user_id = ?, site_name = ?, site_path = ?", array($s_owner, $s_name, $s_path));
 		if($result->rowCount()){
 			if(mkdir("sites/$s_path", 0755)){
+				mkdir("sites/$s_path/nodes", 0755);
+				//@TODO create template files and allow editing of those files through deepwater
 				$this->node->status_messages['status'][] =  "New site profile created.";
 				$this->node->redirect($this->node->paths['base'].'/admin/site/');
 			}else{

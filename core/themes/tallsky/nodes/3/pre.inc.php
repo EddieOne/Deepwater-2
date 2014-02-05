@@ -37,9 +37,17 @@ class pre extends node{
 			}else{
 				$alias_route = str_replace('/', '', $alias_route);
 			}
+			// if updated site id is different, move node files
+			if($this->edit_node->meta['sid'] != $_POST['site']){
+				$nsp = $this->edit_node->get_site_path($_POST['site']);
+				$moved = rename($this->edit_node->paths['node'], 'sites/'.$nsp.'/nodes/'.$this->edit_node->nid);
+				if(!$moved){
+					$this->status_messages['error'][] =  "Unable to move node files to ".$nsp;
+				}
+			}
 			// update node data
 			$node_result = $this->node->execute( "UPDATE nodes SET 
-					sid = 1,
+					sid = :sid,
 					vid = :vid,
 					user_id = :owner,
 					status = :status,
@@ -53,6 +61,7 @@ class pre extends node{
 					description = :description,
 					keywords = :keywords 
 					WHERE nid = :enid", array(
+					':sid' => $_POST['site'],
 					':vid' => $n_vid,
 					':status' => $_POST['status'],
 					':owner' => $this->node->user_id,
@@ -145,7 +154,7 @@ EOD;
 			$site_name = $row['site_name'];
 			$site_path = $row['site_path'];
 			if($sid == $current_sid){
-				$selected = 'selected';	
+				$selected = 'selected="selected"';	
 			}else{
 				$selected = '';	
 			}

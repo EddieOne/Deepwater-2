@@ -70,6 +70,7 @@ class pre extends node{
 					touch('core/themes/'.self::$admin_theme.'/nodes/'.$nid.'/page.inc.php');
 					chmod('core/themes/'.self::$admin_theme.'/nodes/'.$nid.'/page.inc.php', 0644);
 				}else{
+					$site = $this->node->get_site_path(1);
 					mkdir("sites/$site/nodes/$nid", 0755);
 					touch("sites/$site/nodes/$nid/page.inc.php");
 					chmod("sites/$site/nodes/$nid/page.inc.php", 0644);

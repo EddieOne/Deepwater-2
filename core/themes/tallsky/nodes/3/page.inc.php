@@ -89,7 +89,7 @@
 			<div><strong>Site Profile</strong></div>
 			<p>
 				<select name="site" tabindex="11" >
-					<?=$pre->site_html($pre->node, $pre->node->meta['sid']);?>
+					<?=$pre->site_html($pre->node, $pre->edit_node->meta['sid']);?>
 				</select>
 			</p>
 		</div>
