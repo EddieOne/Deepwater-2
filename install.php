@@ -41,7 +41,7 @@ if($step_num == 2){
 	// step 2 submit
 	if(!empty($_POST['user'])){
 		
-		$config = <<<'EOT'
+		$config = <<<EOT
 <?php
 class configuration {
 	// database connection 
@@ -64,6 +64,7 @@ class configuration {
 }
 %%?%%>
 EOT;
+
 		$search = array('%%host%%', '%%user%%', '%%pass%%', '%%name%%', '%%port%%', '%%salt%%', '%%base%%', '%%domain%%', '%%path%%', '%%?%%');
 		$replace = array($_POST['host'], $_POST['user'], $_POST['pass'], $_POST['name'], $_POST['port'], $_POST['salt'], $_POST['base'], $_POST['domain'], $_POST['path'], '?');
 		$config_text = str_replace($search, $replace, $config);
@@ -129,24 +130,25 @@ $dw_sql[] = "CREATE TABLE IF NOT EXISTS `nodes` (
 
 $dw_sql[] = "INSERT INTO `nodes` (`nid`, `sid`, `vid`, `user_id`, `status`, `created`, `changed`, `type`, `alias_route`, `alias`, `options`, `title`, `description`, `keywords`) VALUES
 (1, 1, 1.007, 1, 0, 1389085059, 1389085059, 'core', 'admin', '/admin/page/new/', '', 'New Page', '', ''),
-(2, 1, 1.009, 1, 0, 1389104903, 1389104903, 'core', 'admin', '/admin/user/login/', '', 'User Login', '', ''),
+(2, 1, 1.009, 1, 0, 1389104903, 1389104903, 'core', 'admin', '/admin/user/login/', '', 'Admin Login', '', ''),
 (3, 1, 1.001, 1, 0, 1388645558, 1388645558, 'core', 'admin', '/admin/page/editor/', '', 'Edit Page', '', ''),
 (4, 1, 1.004, 1, 0, 1389006369, 1389006369, 'core', 'admin', '/admin/', '', 'Admin Control Panel', '', ''),
 (5, 1, 0.051, 1, 0, 1389136446, 1389136446, 'core', 'admin', '/admin/page/', '', 'View Pages', '', ''),
-(6, 1, 0.022, 1, 0, 1389071628, 1389071628, 'core', 'admin', '/admin/site/', '', 'Site Profiles', '', ''),
-(7, 1, 0.012, 1, 0, 1389219832, 1389219832, 'core', 'admin', '/admin/user/', '', 'User Admin', '', ''),
-(8, 1, 0.003, 1, 0, 1389064841, 1389064841, 'core', 'admin', '/admin/site/new/', '', 'New Site Profile', '', ''),
-(9, 1, 0.012, 1, 0, 1389133579, 1389133579, 'core', 'admin', '/admin/site/modify/{sid}/', '', 'Modify Site Profile', '', ''),
-(10, 1, 0.007, 1, 0, 1389082508, 1389082508, 'core', 'admin', '/admin/site/delete/{sid}/', '', 'Delete Site Profile', '', ''),
+(6, 1, 0.022, 1, 0, 1389071628, 1389071628, 'core', 'admin', '/admin/site/', '', 'View Sites', '', ''),
+(7, 1, 0.012, 1, 0, 1389219832, 1389219832, 'core', 'admin', '/admin/user/', '', 'View Users', '', ''),
+(8, 1, 0.003, 1, 0, 1389064841, 1389064841, 'core', 'admin', '/admin/site/new/', '', 'New Site', '', ''),
+(9, 1, 0.012, 1, 0, 1389133579, 1389133579, 'core', 'admin', '/admin/site/modify/{sid}/', '', 'Modify Site', '', ''),
+(10, 1, 0.007, 1, 0, 1389082508, 1389082508, 'core', 'admin', '/admin/site/delete/{sid}/', '', 'Delete Site', '', ''),
 (11, 1, 0.016, 1, 0, 1389088023, 1389088023, 'core', 'admin', '/admin/page/delete/{nid}/', '', 'Delete Page', '', ''),
 (12, 1, 0.005, 1, 0, 1389091203, 1389091203, 'core', 'admin', '/admin/reference/', '', 'Core Reference', '', ''),
-(13, 1, 0.015, 1, 0, 1389250832, 1389250832, 'core', 'admin', '/admin/user/new/', '', 'Create User', '', ''),
+(13, 1, 0.015, 1, 0, 1389250832, 1389250832, 'core', 'admin', '/admin/user/new/', '', 'New User', '', ''),
 (14, 1, 0.091, 1, 0, 1389220120, 1389220120, 'core', 'admin', '/admin/user/roles/', '', 'User Roles', '', ''),
 (15, 1, 0.006, 1, 0, 1389220189, 1389220189, 'core', 'admin', '/admin/user/roles/delete/{rid}/', '', 'Delete Role', '', ''),
 (16, 1, 0.008, 1, 0, 1389220157, 1389220157, 'core', 'admin', '/admin/user/roles/modify/{rid}/', '', 'Modify Role', '', ''),
 (17, 1, 0.027, 1, 0, 1389600496, 1389600496, 'core', 'admin', '/admin/user/modify/{uid}/', '', 'Modify User', '', ''),
 (18, 1, 0.006, 1, 0, 1389250668, 1389250668, 'core', 'admin', '/admin/user/delete/{uid}/', '', 'Delete User', '', ''),
 (19, 1, 0.008, 1, 0, 1389245479, 1389245479, 'core', 'admin', '/admin/user/log/sort-by/{sort}/', '', 'User Log', '', ''),
+(20, 1, 0.030, 1, 0, 1391765430, 1391765430, 'core', 'admin', '/admin/update/', '', 'Update Deepwater', '', ''),
 (1000, 1, 1.004, 1, 0, 1389137430, 1389137430, 'html', 'frontpage', '/frontpage/', '', 'Welcome to Deepwater', '', ''),
 (1001, 1, 1.100, 1, 1, 1388039909, 1388039909, 'default', '404', '/404/', '', 'Page Not Found', '', ''),
 (1002, 1, 0.002, 1, 0, 1389048810, 1389048810, 'default', 'access-denied', '/access-denied/', '', 'Access Denied ', '', '');";
@@ -181,11 +183,12 @@ $dw_sql[] = "INSERT INTO `nodes_roles` (`pid`, `nid`, `rid`, `auth`) VALUES
 (18, 17, 1, 'rw'),
 (19, 18, 1, 'rw'),
 (20, 19, 1, 'rw'),
-(21, 1000, 1, 'rw'),
-(22, 1000, 3, 'r'),
-(23, 1001, 3, 'r'),
-(24, 1001, 1, 'rw'),
-(25, 1002, 1, 'rw');";
+(21, 20, 1, 'rw')
+(22, 1000, 1, 'rw'),
+(23, 1000, 3, 'r'),
+(24, 1001, 3, 'r'),
+(25, 1001, 1, 'rw'),
+(26, 1002, 1, 'rw');";
 
 $dw_sql[] = "CREATE TABLE IF NOT EXISTS `sites` (
   `sid` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -283,8 +286,8 @@ function check_environment(){
 		$environment['os']['status']= false;
 	}
 	
-	$environment['php']['name'] = 'PHP version > 5.3.0';
-	if (version_compare(phpversion(), '5.3.0', '>')) {
+	$environment['php']['name'] = 'PHP version > 5.3.3';
+	if (version_compare(phpversion(), '5.3.3', '>=')) {
 		$environment['php']['status'] = true;
 	}else{
 		$environment['php']['status'] = false;

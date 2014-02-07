@@ -1,8 +1,13 @@
 <?php
 session_start();
 error_reporting(E_ALL);
-$root_path = __DIR__;
-include 'core/includes/node.inc.php';
+$root_path = dirname(__FILE__);
+if(file_exists('core/includes/configuration.inc.php')){
+	include 'core/includes/node.inc.php';
+}else{
+	header('Location: install.php');
+	exit();
+}
 $node = new node();
 $pre = null;
 if(file_exists($node->paths['pre'])){

@@ -1,5 +1,5 @@
 # Disallow internet access for protected filetypes.
-<FilesMatch "\.(inc.php|py|sh|bak|sql|nodes)$">
+<FilesMatch "\.(inc.php|phar|py|sh|bak|sql|nodes)$">
 Order allow,deny
 </FilesMatch>
 
