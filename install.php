@@ -247,7 +247,8 @@ if($step_num == 3){
 		$db->execute( "INSERT INTO users_roles SET user_id = ?, rid = 1",array($admin_id));
 		
 		chmod("install.php", 0200);
-		header('Location: admin/'); 
+		$base_url = str_replace('/install.php', '', "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]");
+		header('Location: '.$base_url.'/admin/'); 
 	}
 }
 
