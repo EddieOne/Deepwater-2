@@ -41,31 +41,7 @@ if($step_num == 2){
 	// step 2 submit
 	if(!empty($_POST['user'])){
 		
-		// @TODO replace this with a text file template or yaml config
-		// to avoid pre install errors on hosts with < PHP 5.3.0
-		$config = <<<'EOT'
-<?php
-class configuration {
-	// database connection 
-	public $db_host='%%host%%';
-	public $db_user='%%user%%';
-	public $db_pass='%%pass%%';
-	public $db_name='%%name%%';
-	public $db_port=%%port%%;
-	public $hash_salt = '%%salt%%';
-	public $number_base = '%%base%%';
-	
-	// common varibles
-	public static $base_url = '%%domain%%';
-	public static $install_path = '%%path%%';
-	public static $default_site = 'default';
-	public static $admin_theme = 'tallsky';
-	public static $site_status = 'online';
-	public static $offline_message = 'We are undergoing maintenance. Please check back soon. ';
-	public static $ban_message = 'You have been banned.';
-}
-%%?%%>
-EOT;
+		$config = file_get_contents('core/install/config-template.inc.php');
 
 		$search = array('%%host%%', '%%user%%', '%%pass%%', '%%name%%', '%%port%%', '%%salt%%', '%%base%%', '%%domain%%', '%%path%%', '%%?%%');
 		$replace = array($_POST['host'], $_POST['user'], $_POST['pass'], $_POST['name'], $_POST['port'], $_POST['salt'], $_POST['base'], $_POST['domain'], $_POST['path'], '?');
