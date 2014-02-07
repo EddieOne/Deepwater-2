@@ -41,7 +41,9 @@ if($step_num == 2){
 	// step 2 submit
 	if(!empty($_POST['user'])){
 		
-		$config = <<<EOT
+		// @TODO replace this with a text file template or yaml config
+		// to avoid pre install errors on hosts with < PHP 5.3.0
+		$config = <<<'EOT'
 <?php
 class configuration {
 	// database connection 
