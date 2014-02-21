@@ -21,27 +21,69 @@ class pre extends node{
 		
 		if(!empty($_POST['update_deepwater'])){
 			$address =  'https://api.github.com/repos/EddieOne/Deepwater-2/zipball/master';
+			// check for update dir
 			if(!is_dir($root_path.'/core/updates')){
 				mkdir($root_path.'/core/updates', 0755);
 			}
+			// lazy check for version download errors
 			if(!is_float(floatval($this->remote_version))){
 				$this->node->status_messages['admin'][] = 'Error finding new version';
 				return false;
 			}
+			// create a version dir
 			if(!is_dir($root_path.'/core/updates/'.$this->remote_version)){
 				mkdir($root_path.'/core/updates/'.$this->remote_version, 0755);
 			}
 			$file_location = $root_path.'/core/updates/'.$this->remote_version.'/deepwater-'.$this->remote_version.'.zip';
+			// try downloading the newer version from git
 			if(!file_exists($file_location)){
 				$this->download_file($address, $file_location);
 			}
-			$this->unzip($file_location, $root_path.'/core/updates/'.$this->remote_version);
-			$dirs = glob($root_path.'/core/updates/'.$this->remote_version.'/EddieOne-Deepwater-2', GLOB_ONLYDIR);
-			print_r($dirs);
-			// get unzipped directory name
-			// delete install.php and sites folder
+			// unzip the downloaded file
+			$unzip_result = $this->unzip($file_location, $root_path.'/core/updates/'.$this->remote_version);
+			// catch zip errors
+			if($unzip_result === false){
+				$this->node->status_messages['admin'][] = 'Error unzipping update';
+				return false;
+			}
+			$git_dir = '/EddieOne-Deepwater-2-'.substr($unzip_result, 0, 7);
+			
+			if(!is_dir($root_path.'/core/updates/'.$this->remote_version.'/files')){ 
+				mkdir($root_path.'/core/updates/'.$this->remote_version.'/files', 0755);
+				// move github archive dir to files dir
+				rename($root_path.'/core/updates/'.$this->remote_version.$git_dir, $root_path.'/core/updates/'.$this->remote_version.'/files');
+			}
+			
+			
+			// delete sites dir and install.php from update files
+			include $root_path.'/core/includes/filesystem.inc.php';
+			filesystem::del_dir($root_path.'/core/updates/'.$this->remote_version.'/files/sites');
+			unlink($root_path.'/core/updates/'.$this->remote_version.'/files/install.php');
+			
+			// search for sql files that run database updates
+			$updates = array_diff(scandir($root_path.'/core/updates'), array('..', '.'));
+			foreach($updates as $update){
+				// everything here should be a directory but lets check
+				if(is_dir($root_path.'/core/updates/'.$update)){
+					// see if the update has an sql update file
+					if(file_exists($root_path.'/core/updates/'.$update.'/update.sql')){
+						// make sure we need to execute the sql
+						if(version_compare($update, $this->version, '>')){
+							$sql = read_sql_file($root_path.'/core/updates/'.$update.'/update.sql');
+							$update_queries = split_sql($sql);
+							foreach($update_queries as $query){
+								$result = $this->node->execute($query);
+							}
+						}
+						
+					}
+				}
+			}
+			
 			// replace production files
-			// execute mysql queries
+			// uncomment after 1.0.5 update testing
+			//filesystem::copy_dir($root_path.'/core/updates/'.$this->remote_version.'/files', $root_path);
+			
 			// delete extra files
 			
 		}
@@ -73,9 +115,10 @@ class pre extends node{
 	private function unzip($zip_file, $destination){
 		$zip = new ZipArchive;
 		if ($zip->open($zip_file) === TRUE) {
+			$comment = $zip->getArchiveComment();
 			$zip->extractTo($destination);
 			$zip->close();
-			return true;
+			return $comment;
 		} else {
 			return false;
 		}
@@ -142,6 +185,96 @@ class pre extends node{
     		}
 		}
 		return $response;
+	}
+	// read sql line by line and strip comments. Returns a string 
+	public function read_sql_file($sql_file){
+		// read sql line by line to save memory
+		$handle = @fopen($sql_file, "r");
+		$output = '';
+		if ($handle) {
+			$in_comment = false;
+			while (($buffer = fgets($handle, 4096)) !== false) {
+				// if line not empty, not comment, and not a remark
+				if(strpos($buffer, '\n') === false && strpos($buffer, '/*!') === false && strpos($buffer, '-- ') === false){
+					$output .= trim($buffer);	
+					}
+				if (feof($handle) === false){
+					$output .= "\n";
+				}
+			}
+   	 	fclose($handle);
+		}
+		return $output;
+	}
+
+	// split sql string into single statements
+	function split_sql($sql){
+		$delimiter = ';';
+		$tokens = explode($delimiter, $sql);
+		unset($sql);
+		$output = array();
+		// matches are not important
+		$matches = array();
+		$token_count = count($tokens);
+		
+		for ($i = 0; $i < $token_count; $i++){
+			// Avoid adding empty string at the end of return array
+			if (($i != ($token_count - 1)) || (strlen($tokens[$i] > 0))){
+				// Ttotal number of single quotes in the token.
+				$total_quotes = preg_match_all("/'/", $tokens[$i], $matches);
+				// Count escaped quotes
+				$escaped_quotes = preg_match_all("/(?<!\\\\)(\\\\\\\\)*\\\\'/", $tokens[$i], $matches);
+				$unescaped_quotes = $total_quotes - $escaped_quotes;
+				// If the number of unescaped quotes is even, then the delimiter did NOT occur inside a string literal.
+				if (($unescaped_quotes % 2) == 0){
+					// It's a complete sql statement.
+					$output[] = $tokens[$i];
+					// save memory.
+					$tokens[$i] = "";
+				}else{
+					// incomplete sql statement. keep adding tokens until we have a complete one.
+					// $temp will hold what we have so far.
+					$temp = $tokens[$i] . $delimiter;
+					// save memory..
+					$tokens[$i] = "";
+
+					// Do we have a complete statement yet?
+					$complete_stmt = false;
+
+					for ($j = $i + 1; (!$complete_stmt && ($j < $token_count)); $j++){
+						// This is the total number of single quotes in the token.
+						$total_quotes = preg_match_all("/'/", $tokens[$j], $matches);
+						// Counts single quotes that are preceded by an odd number of backslashes,
+						// which means they're escaped quotes.
+						$escaped_quotes = preg_match_all("/(?<!\\\\)(\\\\\\\\)*\\\\'/", $tokens[$j], $matches);
+
+						$unescaped_quotes = $total_quotes - $escaped_quotes;
+
+						if (($unescaped_quotes % 2) == 1){
+							// odd number of unescaped quotes. In combination with the previous incomplete
+							// statement(s), we now have a complete statement. (2 odds always make an even)
+							$output[] = $temp . $tokens[$j];
+
+							// save memory.
+							$tokens[$j] = "";
+							$temp = "";
+	
+							// exit the loop.
+							$complete_stmt = true;
+							// make sure the outer loop continues at the right point.
+							$i = $j;
+						}else{
+							// even number of unescaped quotes. We still don't have a complete statement.
+							// (1 odd and 1 even always make an odd)
+							$temp .= $tokens[$j] . $delimiter;
+							// save memory.
+							$tokens[$j] = "";
+						}
+					}
+				}
+			}
+		}
+		return $output;
 	}
 }
 ?>
