@@ -9,6 +9,7 @@ class pre extends node{
 	public $node;
 	public $version;
 	public $remote_version;
+	public $update_msg;
 	
 	private $agent;
 	
@@ -20,6 +21,7 @@ class pre extends node{
 		$this->get_versions();
 		
 		if(!empty($_POST['update_deepwater'])){
+			$this->update_msg = '';
 			$address =  'https://api.github.com/repos/EddieOne/Deepwater-2/zipball/master';
 			// check for update dir
 			if(!is_dir($root_path.'/core/updates')){
@@ -57,21 +59,30 @@ class pre extends node{
 			
 			// delete sites dir and install.php from update files
 			include $root_path.'/core/includes/filesystem.inc.php';
-			filesystem::del_dir($root_path.'/core/updates/'.$this->remote_version.'/files/sites');
-			unlink($root_path.'/core/updates/'.$this->remote_version.'/files/install.php');
+			if(file_exists($root_path.'/core/updates/'.$this->remote_version.'/files/sites')){
+				filesystem::del_dir($root_path.'/core/updates/'.$this->remote_version.'/files/sites');
+				unlink($root_path.'/core/updates/'.$this->remote_version.'/files/install.php');
+			}
+			
+			// replace production files
+			filesystem::copy_dir($root_path.'/core/updates/'.$this->remote_version.'/files', $root_path);
 			
 			// search for sql files that run database updates
 			$updates = array_diff(scandir($root_path.'/core/updates'), array('..', '.'));
 			foreach($updates as $update){
+				$this->update_msg .= 'Checking '.$update.' folder for sql file.<br />';
 				// everything here should be a directory but lets check
 				if(is_dir($root_path.'/core/updates/'.$update)){
 					// see if the update has an sql update file
 					if(file_exists($root_path.'/core/updates/'.$update.'/update.sql')){
+						$this->update_msg .= 'Sql file found.<br />';
 						// make sure we need to execute the sql
 						if(version_compare($update, $this->version, '>')){
-							$sql = read_sql_file($root_path.'/core/updates/'.$update.'/update.sql');
-							$update_queries = split_sql($sql);
+							$this->update_msg .= 'version needs installing.<br />';
+							$sql = $this->read_sql_file($root_path.'/core/updates/'.$update.'/update.sql');
+							$update_queries = $this->split_sql($sql);
 							foreach($update_queries as $query){
+								$this->update_msg .= 'Executing "'.$query.'" query.<br />';
 								$result = $this->node->execute($query);
 							}
 						}
@@ -80,11 +91,10 @@ class pre extends node{
 				}
 			}
 			
-			// replace production files
-			// uncomment after 1.0.5 update testing
-			//filesystem::copy_dir($root_path.'/core/updates/'.$this->remote_version.'/files', $root_path);
-			
-			// delete extra files
+			// clean up, delete downloaded zip
+			if(file_exists($file_location)){
+				//unlink($file_location);
+			}
 			
 		}
 	}
