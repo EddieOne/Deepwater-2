@@ -48,7 +48,10 @@ class pre extends node{
 				$this->node->status_messages['admin'][] = 'Error unzipping update';
 				return false;
 			}
-			$git_dir = '/EddieOne-Deepwater-2-'.substr($unzip_result, 0, 7);
+			$git_dir = 'EddieOne-Deepwater-2';
+			if(!is_dir($root_path.'/core/updates/'.$this->remote_version.'/EddieOne-Deepwater-2')){
+				$git_dir = '/EddieOne-Deepwater-2-'.substr($unzip_result, 0, 7);
+			}
 			
 			if(!is_dir($root_path.'/core/updates/'.$this->remote_version.'/files')){ 
 				mkdir($root_path.'/core/updates/'.$this->remote_version.'/files', 0755);
@@ -93,7 +96,7 @@ class pre extends node{
 			
 			// clean up, delete downloaded zip
 			if(file_exists($file_location)){
-				//unlink($file_location);
+				unlink($file_location);
 			}
 			
 		}
