@@ -20,6 +20,7 @@
 		</div>
 	</div>
 	<div class="eight columns">
+		<a href="<?=$node->paths['base'];?>/" class="button" >View Website</a>
 		<a href="<?=$node->paths['base'];?>/admin/update/" class="button" >Check for Updates</a>
 	</div>
 </div>
