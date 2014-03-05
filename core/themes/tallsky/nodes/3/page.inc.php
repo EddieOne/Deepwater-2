@@ -106,7 +106,7 @@
 		
 		<div class="sixteen columns">
 			<div><strong>Page Code </strong>(Press F11 to view fullscreen)</div>
-			<p style="border:#aebfcf solid 1px;"><textarea id="page_code" name="page_code" ><?=$pre->en_page;?></textarea></p>
+			<p style="border:#aebfcf solid 1px;"><textarea id="page_code" name="page_code" ><?=htmlspecialchars($pre->en_page);?></textarea></p>
 		</div>
 		
 		<div class="offset-by-fourteen two columns"><input name="edit_page" type="submit" value="Modify" class="button" tabindex="6" /></div>
