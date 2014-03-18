@@ -1,6 +1,6 @@
 <?php
 class overall extends node{
-public function overall($node){
+public function overall($node, $pre){
 ?>
 
 <!DOCTYPE html>

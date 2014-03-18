@@ -79,9 +79,13 @@ class validation {
 		$now = time();
 		$diff = $now-$time; 
 		$days = intval($diff/24/60/60); 
-		if($days<1){$hours=intval($diff/3600);}
-		if($hours<1){$mins=intval($diff/60);}
-		if($mins<1){$secs=$diff;}
+		if($days<1){
+			$hours=intval($diff/3600);
+			if($hours<1){
+				$mins=intval($diff/60);
+				if($mins<1){$secs=$diff;}
+			}
+		}
 		if($days>=1){if($days>1){return $days." days";}else{return $days." day";}}
 		if($hours>=1){if($hours>1){return $hours." hours";}else{return $hours." hour";}}
 		if($mins>1){return $mins." minutes";}elseif($mins<=1){return $secs." seconds";}

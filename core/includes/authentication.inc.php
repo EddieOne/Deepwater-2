@@ -302,8 +302,8 @@ class authentication extends navigator {
 			return false;	
 		}
 		while($row = $result->fetch()){
-			$uid = $row['user_id'];
-			return $uid;
+			$name= $row['user_name'];
+			return $name;
 		}
 	}
 	function get_uid_from_name($name){
