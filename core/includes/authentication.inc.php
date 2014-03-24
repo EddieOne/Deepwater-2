@@ -151,7 +151,7 @@ class authentication extends navigator {
 		$this->token = false;
 		session_unset();
 		session_destroy();
-		$this->redirect();
+		$this->redirect($this->paths['base']);
 		$this->unsetLoginCookie();
 	}
 	// check flood attempts by time and count based on event, false = flood detected
