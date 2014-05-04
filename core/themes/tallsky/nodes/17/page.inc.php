@@ -39,8 +39,25 @@
 
 	</form>
 </div>
-<div class="eleven">
-	@TODO<br />
-	- List user's roles<br />
-	- Option to give user a role
+<div class="ten columns offset-by-one">
+	<h4>User's Roles</h4>
+	<form action="" method="post">
+	<?
+	$defined_roles = $pre->node->get_defined_roles();
+	$roles = $pre->node->get_user_roles($pre->uid);
+	foreach($defined_roles as $name => $rid){
+		echo $name;
+		echo '<select name="permissions['.$rid.']">';
+		if(in_array($rid, $roles)){
+			echo '<option value="true">Present</option>';
+			echo '<option value="fales">Remove</option>';
+		}else{
+			echo '<option value="false">Not Present</option>';
+			echo '<option value="true">Add</option>';
+		}
+		echo '</select>';
+	}
+	?>
+	<input class="button" name="modify_roles" value="Update Roles" type="submit" />
+	</form>
 </div>

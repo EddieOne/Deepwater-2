@@ -189,7 +189,7 @@ $dw_sql[] = "CREATE TABLE IF NOT EXISTS `users` (
   `token` varchar(100) NOT NULL COMMENT 'Login token.',
   `created` int(11) unsigned NOT NULL COMMENT 'Unix time of account creation.',
   `accessed` int(11) unsigned NOT NULL COMMENT 'Unix time of last login.',
-  `status` int(3) NOT NULL COMMENT '0 = banned, 1 = email not confirmed, 2 = active',
+  `status` int(3) NOT NULL COMMENT '0 = banned, 1 = email not confirmed, 2 = active, 3 = pw reset token',
   `profile` varchar(140) NOT NULL COMMENT 'Facebook, twitter, or google+ profile link.',
   `notify` int(3) NOT NULL COMMENT 'Email notify.',
   `misc` varchar(20) NOT NULL COMMENT 'extra space for customization.',

@@ -1,0 +1,1 @@
+ALTER TABLE `users` CHANGE `status` `status` INT(3) NOT NULL COMMENT '0 = banned, 1 = email not confirmed, 2 = active, 3 = pw reset token';

@@ -109,5 +109,12 @@ class validation {
 		$q = htmlspecialchars($q);
 		return filter_var($q, FILTER_SANITIZE_STRING);
 	}
+	static public function rand_str($length){
+        $lowAlpha = "abcdefghijklmnopqrstuvwxyz";
+        $highAlpha = "ABCDEFGHIJKLMNPQRSTUVWXYZ";
+        $numeric = "0123456789";
+        // shuffle all characters and limit by legnth
+        return substr(str_shuffle($highAlpha.$lowAlpha.$numeric), 0, $length);
+    }
 }
 ?>

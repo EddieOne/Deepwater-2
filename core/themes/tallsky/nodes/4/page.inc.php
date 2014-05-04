@@ -23,4 +23,9 @@
 		<a href="<?=$node->paths['base'];?>/" class="button" >View Website</a>
 		<a href="<?=$node->paths['base'];?>/admin/update/" class="button" >Check for Updates</a>
 	</div>
+	<div class="eight columns">
+		<h3>User Statistics</h3>
+		<p><?=$pre->user_count;?> total users.</p>
+		<p><?=$pre->weekly_users;?> new users this week.</p>
+	</div>
 </div>

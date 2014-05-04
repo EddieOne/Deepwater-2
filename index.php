@@ -1,4 +1,7 @@
 <?php
+include 'core/includes/session.inc.php';
+$handler = new session();
+session_set_save_handler($handler, true);
 session_start();
 error_reporting(E_ALL);
 $root_path = dirname(__FILE__);

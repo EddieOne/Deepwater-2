@@ -17,6 +17,10 @@ public function overall($node, $pre){
 	<meta name="description" content="<?=$node->meta['description'];?>">
 	<meta name="keywords" content="<?=$node->meta['keywords'];?>">
 	<meta name="author" content="">
+	
+	<!-- Favicons
+	================================================== -->
+	<link rel="shortcut icon" href="<?=$node->paths['site'];?>images/favicon.ico">
 
 	<!-- Mobile Specific Metas
   ================================================== -->
@@ -31,10 +35,7 @@ public function overall($node, $pre){
 	<!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
-
-	<!-- Favicons
-	================================================== -->
-	<link rel="shortcut icon" href="<?=$node->paths['site'];?>images/favicon.ico">
+	<? if(isset($pre->page_head)){ echo $pre->page_head; } // per page headers ?>
 
 </head>
 <body>
@@ -52,7 +53,32 @@ public function overall($node, $pre){
 
 <!-- Javascript
 	================================================== -->
-	<script type="text/javascript" src="<?=self::$base_url.self::$install_path;?>/core/assets/jquery/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="<?=$node->paths['base'];?>/core/assets/jquery/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="<?=$node->paths['base'];?>/core/assets/jgrowl/jquery.jgrowl.min.js"></script>
+<?
+// status messages
+if(isset($_SESSION['status_messages'])){
+	$node->status_messages = array_merge($node->status_messages, $_SESSION['status_messages']);
+	$_SESSION['status_messages'] = array();
+}
+if(!empty($node->status_messages)){
+	echo '<script type="text/javascript">';
+	foreach($node->status_messages as $key => $status){
+		if(is_array($status)){
+			foreach($status as $sub_status){
+				if($key == 'admin'){
+					echo "$.jGrowl('$sub_status', { life: 4500, sticky: true });";
+				}else{
+					echo "$.jGrowl('$sub_status', { life: 4500 });";
+				}
+			}
+		}else{
+			echo "$.jGrowl('$status', { life: 4500 });";
+		}
+	}
+	echo '</script>';
+}
+?></script>
 <!-- End Document
 ================================================== -->
 </body>

@@ -1,6 +1,8 @@
 <?
 class pre extends node{
 	public $node;
+	public $user_count;
+	public $weekly_users;
 	
 	public function pre($node){
 		$this->node = $node;
@@ -12,6 +14,15 @@ class pre extends node{
 		$this->mem_limit = str_replace('M', '', ini_get('memory_limit'));
 		
 		$this->avr_load();
+		
+		$result = $node->execute("SELECT count(user_id) FROM users", array());
+		$row = $result->fetch();
+		$this->user_count = $row[0];
+		
+		$past_week = $node->time - 604800;
+		$result = $node->execute("SELECT count(user_id),created FROM users WHERE created > ?", array($past_week));
+		$row = $result->fetch();
+		$this->weekly_users = $row[0];
 	}
 	function proc_stats(){   
 		$fp=fopen("/proc/stat","r");

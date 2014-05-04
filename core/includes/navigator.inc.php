@@ -15,8 +15,16 @@ class navigator extends pdo_db {
 		$this->alias_path = $this->get_alias($this->current_address);
 		$this->alias_parts = $this->get_alias_array($this->alias_path);
 		$this->alias_count = count($this->alias_parts);
-		if(!empty($this->alias_parts)){ $this->alias_route = $this->alias_parts[0]; }
 		// begin seeking the true path
+		// filter out query strings
+		for($i = 0; $i < $this->alias_count; $i++){
+			if(strpos($this->alias_parts[$i], '?') === 0){
+				$this->alias_parts = array_slice($this->alias_parts, 0, $i);
+				$this->alias_count = count($this->alias_parts);
+			}
+		}
+		if(!empty($this->alias_parts)){ $this->alias_route = $this->alias_parts[0]; }
+		
 		if(!empty($this->alias_parts) && $this->alias_parts[$this->alias_count - 1] == 'edit'){
 			// give alias parts of the node being edited
 			$this->alias_parts = array_splice($this->alias_parts, 0, $this->alias_count - 1);
@@ -55,7 +63,7 @@ class navigator extends pdo_db {
 	function get_alias_array($alias){
 		$aliasarray = explode("/", $alias);
 		if(is_array($aliasarray)){ 
-			$aliasarray = array_filter($aliasarray);
+			$aliasarray = array_filter($aliasarray, 'strlen');
 		}else{
 			$aliasarray = array();
 		}
@@ -88,6 +96,14 @@ class navigator extends pdo_db {
 	}
 	function redirect($to){
 		if(empty($to)){ $to = self::$base_url; }
+		if(!empty($this->status_messages)){
+			if(is_array($_SESSION['status_messages'])){
+				$_SESSION['status_messages'] = array_merge($_SESSION['status_messages'], $this->status_messages);
+			}else{
+				$_SESSION['status_messages'] = $this->status_messages;
+			}
+		}
+		
 		header('Location: '.$to); 
 		exit();
 	}

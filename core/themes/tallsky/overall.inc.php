@@ -30,6 +30,10 @@ class overall extends node{
 	<script type="text/javascript" src="<?=$node->paths['base'];?>/core/assets/jgrowl/jquery.jgrowl.min.js"></script>
 <?
 // status messages
+if(isset($_SESSION['status_messages'])){
+	$node->status_messages = array_merge($node->status_messages, $_SESSION['status_messages']);
+	$_SESSION['status_messages'] = array();
+}
 if(!empty($node->status_messages)){
 	echo '<script type="text/javascript">';
 	foreach($node->status_messages as $key => $status){

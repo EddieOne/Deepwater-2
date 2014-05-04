@@ -1,7 +1,7 @@
 <?
 class pre extends node{
 	public $node;
-	private $uid;
+	public $uid;
 	public $user;
 	
 	public function pre($node){
@@ -11,6 +11,18 @@ class pre extends node{
 			$this->node->status_messages['error'][] =  "The user could not be found.";
 			return false;
 		}
+		// modify roles post data
+		if(!empty($_POST['modify_roles'])){
+			$result = $this->node->execute("DELETE FROM users_roles WHERE user_id = ?", array($this->uid));
+			foreach($_POST['permissions'] as $rid => $value){
+				if($value == 'true'){
+					$result = $this->node->execute("INSERT INTO users_roles SET user_id = ?, rid = ?", array($this->uid,$rid));	
+				}
+			}
+			$this->node->status_messages['status'][] = 'Roles successfully modified.';
+			
+		}
+		// change user post data
 		if(!empty($_POST['modify_user'])){
 			if(empty($_POST['user_name']) || empty($_POST['mail']) || empty($_POST['status'])){
 				$this->node->status_messages['error'][] =  "Name, pass, mail, and status are required.";

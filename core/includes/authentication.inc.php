@@ -103,8 +103,13 @@ class authentication extends navigator {
 		$_SESSION['user_id'] = $user->user_id;
 		$_SESSION['token'] = $this->token;
 		$this->set_login_cookie();
-		$result = $this->execute("UPDATE users SET accessed = ?, token = ? WHERE user_id = ?", array($this->time, $this->token, $this->user_id));
-		$this->status_messages['status'][] = "Successful login";
+		if($user->status == 3){
+			$result = $this->execute("UPDATE users SET accessed = ?, token = ?, status = 2 WHERE user_id = ?", array($this->time, $this->token, $this->user_id));
+		}else{
+			$result = $this->execute("UPDATE users SET accessed = ?, token = ? WHERE user_id = ?", array($this->time, $this->token, $this->user_id));
+		}
+		$_SESSION['status_messages']['status'][] = "Successful login";
+		$this->redirect($frompage);
 		return true;
 	}
 	public function cookie_login($token){
@@ -316,6 +321,14 @@ class authentication extends navigator {
 			return $uid;
 		}
 	}
+	function get_uid_from_email($email){
+		$result = $this->execute("SELECT user_id,mail FROM users WHERE mail = ? LIMIT 1", array($email));
+		if(!$result){
+			return false;	
+		}
+		$row = $result->fetch();
+		return $row['user_id'];
+	}
 	function get_user($uid){
 		$result = $this->execute("SELECT * FROM users WHERE user_id = ? LIMIT 1", array($uid));
 		if(!$result){
@@ -331,7 +344,10 @@ class authentication extends navigator {
 	}
 	function spider_check(){
 		$content = '';
-		$useragent = $_SERVER['HTTP_USER_AGENT'];;
+		$useragent = '';
+		if(isset($_SERVER['HTTP_USER_AGENT'])){
+			$useragent = $_SERVER['HTTP_USER_AGENT'];
+		}
 		if(stripos($useragent,"google")==true)
 		$content = "google";
 		elseif(stripos($useragent,"yahoo")==true)
