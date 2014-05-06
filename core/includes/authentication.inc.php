@@ -339,6 +339,7 @@ class authentication extends navigator {
 			$userContent['name_slug'] = $row['name_slug'];
 			$userContent['mail'] = $row['mail'];
 			$userContent['created'] = $row['created'];
+			$userContent['profile'] = $row['profile'];
 		}
 		return $userContent;
 	}
