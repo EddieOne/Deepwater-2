@@ -14,13 +14,9 @@ if(!empty($_POST['step_3'])){
 if($step_num == 1){
 	$env_vars = check_environment();	
 	$env_html = '';
-	$disable_but = '';
 	foreach($env_vars as $var){
 		$pass = $var['status'];
 		$name = $var['name'];
-		if(!$pass){
-			$disable_but = ' disabled';
-		}
 		$env_html .= environment_html($pass, $name);
 	}
 }
@@ -405,7 +401,7 @@ EOD;
 					<?=$env_html;?>
 				<div class="twelve columns" style="margin:20px 0 0 0;">
 				<form action="" method="post">
-					<input type="submit" name="step_2" value="Next Step" class="button"<?=$disable_but;?> />
+					<input type="submit" name="step_2" value="Next Step" class="button" />
 				</form>
 				</div>
 			</div>

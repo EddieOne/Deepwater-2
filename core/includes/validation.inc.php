@@ -63,7 +63,7 @@ class validation {
 				return $retval;
 			}
 		if ($fromBaseInput != '0123456789')
-			$base10 = $this->conv_base($numberInput, $fromBaseInput, '0123456789');
+			$base10 = self::conv_base($numberInput, $fromBaseInput, '0123456789');
 		else
 			$base10 = $numberInput;
 		if ($base10<strlen($toBaseInput))
