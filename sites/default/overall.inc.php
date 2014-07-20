@@ -31,6 +31,7 @@ public function overall($node, $pre){
 	<link rel="stylesheet" href="<?=$node->paths['base'];?>/core/assets/skeleton/stylesheets/base.css">
 	<link rel="stylesheet" href="<?=$node->paths['base'];?>/core/assets/skeleton/stylesheets/skeleton-fluid.css">
 	<link rel="stylesheet" href="<?=$node->paths['base'];?>/<?=$node->paths['site'];?>/layout.css">
+	<link rel="stylesheet" href="<?=$node->paths['base'];?>/core/assets/jgrowl/jquery.jgrowl.min.css">
 
 	<!--[if lt IE 9]>
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -78,12 +79,9 @@ if(!empty($node->status_messages)){
 	}
 	echo '</script>';
 }
-?></script>
+?>
 <!-- End Document
 ================================================== -->
 </body>
 </html>
-<noscript><link rel="stylesheet" href="<?=$node->paths['style'];?>"></noscript>
-
-
 <? } } ?>

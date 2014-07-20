@@ -56,7 +56,7 @@ class authentication extends navigator {
  	 	}
 		// User Login from cookie
 		if(!$this->logged_in() && isset($_COOKIE["token"])){
-			//$loginReturn = $this->cookie_login($_COOKIE["token"]);
+			$loginReturn = $this->cookie_login($_COOKIE["token"]);
 		}
 		// User Login from POST
 		if (!$this->logged_in() && !empty($_POST['login'])){
@@ -74,7 +74,7 @@ class authentication extends navigator {
 	}
 	public function login_user($email,$password,$frompage){
 		if(empty($email)){
-			$this->status_messages['error'][] =  "A valid username must be supplied.";
+			$this->status_messages['error'][] =  "A valid email must be supplied.";
 			return false;
 		}
 		if(empty($password)){
@@ -116,8 +116,9 @@ class authentication extends navigator {
 		include_once 'validation.inc.php';
 		if(!$this->check_flood(3,"login")){
 			$this->status_messages['error'][] = "Too many login attempts, please wait an hour.";
-			$this->redirect($frompage);
+			return false;
 		}
+		$token = str_replace(' ', '+', $token);
 		$cookieBits = explode('+', $token);
 		$hash = $cookieBits[0];
 		$tuid = $cookieBits[1];
@@ -125,13 +126,24 @@ class authentication extends navigator {
 		$name = $this->get_user_from_id($tuid);
 		$curHash = hash('tiger192,3', $this->hash_salt.$name.$this->user_ip.$this->hash_salt);
 		if($curHash == $hash){
-			$result = $this->execute("SELECT user_id,user_name,user_pass,token FROM users WHERE user_id = ? AND token = ?", array($tuid, $token));
-			if(!$result){ $this->redirect(); }
-			while($row = $result->fetch()){
-				$user_name = $row['user_name'];
-				$user_pass = $row['user_name'];
+			$result = $this->execute("SELECT * FROM users WHERE user_id = ? AND token = ?", array($tuid, $token));
+			if(!$result){  $this->unset_login_cookie(); $this->redirect($this->current_address()); }
+			$row = $result->fetch(PDO::FETCH_OBJ);
+			$this->user_name = $row->user_name;
+			$this->name_slug = $row->name_slug;
+			$this->user_id = $row->user_id;
+			$this->token = $this->create_token();
+			$_SESSION['user_name'] = $row->user_name;;
+			$_SESSION['name_slug'] = $row->name_slug;
+			$_SESSION['user_id'] = $row->user_id;
+			$_SESSION['token'] = $row->token;
+			$this->set_login_cookie();
+			if($row->status == 3){
+				$result = $this->execute("UPDATE users SET accessed = ?, token = ?, status = 2 WHERE user_id = ?", array($this->time, $this->token, $this->user_id));
+			}else{
+				$result = $this->execute("UPDATE users SET accessed = ?, token = ? WHERE user_id = ?", array($this->time, $this->token, $this->user_id));
 			}
-			$this->login_user($user_name,$user_pass,$base_url);
+			$_SESSION['status_messages']['status'][] = "Successful login";
 		}else{
 			$this->add_flood("login",3600);
 			$this->unset_login_cookie();
