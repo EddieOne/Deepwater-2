@@ -162,14 +162,15 @@ class authentication extends navigator {
 		setrawcookie("token", '', time() - 42000, '/', '', false, true);
 	}
 	public function logout_user(){
+		//$this->execute("UPDATE users SET token = ? WHERE user_id = ?", array('', $this->user_id)); doesn't work for some reason.
 		$this->user_name = 'Guest'; // username
 		$this->name_slug = 'guest'; // lower case, spaces to underscores
 		$this->user_id = false;
 		$this->token = false;
 		session_unset();
 		session_destroy();
+		$this->unset_login_cookie();
 		$this->redirect($this->paths['base']);
-		$this->unsetLoginCookie();
 	}
 	// check flood attempts by time and count based on event, false = flood detected
 	function check_flood($count,$event){
