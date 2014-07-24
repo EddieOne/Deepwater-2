@@ -122,9 +122,15 @@ class authentication extends navigator {
 		$cookieBits = explode('+', $token);
 		$hash = $cookieBits[0];
 		$tuid = $cookieBits[1];
+		$session_time = $cookieBits[1];
 		$tuid = validation::conv_base($tuid, 'aeiou948372', '0123456789');
 		$name = $this->get_user_from_id($tuid);
-		$curHash = hash('tiger192,3', $this->hash_salt.$name.$this->user_ip.$this->hash_salt);
+		// limit tokens to 30 days
+		if($session_time + 2592000 < $this->time){
+			$curHash = hash('tiger192,3', $this->hash_salt.$name.$this->user_ip.$this->hash_salt);
+		}else{
+			$curHash = '';
+		}
 		if($curHash == $hash){
 			$result = $this->execute("SELECT * FROM users WHERE user_id = ? AND token = ?", array($tuid, $token));
 			if(!$result){  $this->unset_login_cookie(); $this->redirect($this->current_address()); }
@@ -162,7 +168,7 @@ class authentication extends navigator {
 		setrawcookie("token", '', time() - 42000, '/', '', false, true);
 	}
 	public function logout_user(){
-		//$this->execute("UPDATE users SET token = ? WHERE user_id = ?", array('', $this->user_id)); doesn't work for some reason.
+		$result = $this->execute("UPDATE users SET token = ? WHERE user_id = ?", array('', $_SESSION['user_id']));
 		$this->user_name = 'Guest'; // username
 		$this->name_slug = 'guest'; // lower case, spaces to underscores
 		$this->user_id = false;
