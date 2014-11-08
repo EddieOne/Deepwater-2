@@ -12,16 +12,21 @@ class pre extends node{
 		$this->s_name = $row['site_name'];
 		
 		if(!empty($_POST['delete_site'])){
-			if(rmdir('sites/'.$row['site_path'])){
-				$result = $this->node->execute("DELETE FROM sites WHERE sid = ?", array($this->sid));
-				if($result->rowCount()){
-					$this->node->status_messages['status'][] =  "Site profile deleted.";
-				}
+			if(!$this->rrmdir('sites/'.$row['site_path'])){
+				$this->node->status_messages['error'][] =  "Unable to delete the site files.";
+			}
+			$result = $this->node->execute("DELETE FROM sites WHERE sid = ?", array($this->sid));
+			if($result->rowCount()){
+				$this->node->status_messages['status'][] =  "Site database entry deleted.";
 			}else{
-				$this->node->redirect($this->node->paths['base'].'/admin/site/');
-				$this->node->status_messages['error'][] =  "Unable to delete site directory.";
+				$this->node->status_messages['error'][] =  "Unable to delete site database entry.";
 			}
 		}
 	}
+	private function rrmdir($dir){ 
+  		foreach(glob($dir . '/*') as $file){ 
+    		if(is_dir($file)) rrmdir($file); else unlink($file); 
+		}
+  	}
 }
 ?>

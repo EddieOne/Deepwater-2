@@ -1,5 +1,5 @@
 <?
-// protect the config file
+// The location where the config is created
 $config_file = 'core/includes/configuration.inc.php';
 		
 if(!empty($_POST['step_3'])){

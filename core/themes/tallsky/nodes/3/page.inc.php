@@ -8,9 +8,18 @@
 </div>
 <link rel="stylesheet" href="<?=$pre->node->paths['base'];?>/core/assets/codemirror/lib/codemirror.css">
 <link rel="stylesheet" href="<?=$pre->node->paths['base'];?>/core/assets/codemirror/addon/display/fullscreen.css">
-<script src="<?=$pre->node->paths['base'];?>/core/assets/codemirror/codemirror-compressed.js"></script>
+<script src="<?=$pre->node->paths['base'];?>/core/assets/codemirror/lib/codemirror.js"></script>
+<script src="<?=$pre->node->paths['base'];?>/core/assets/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+<script src="<?=$pre->node->paths['base'];?>/core/assets/codemirror/mode/xml/xml.js"></script>
+<script src="<?=$pre->node->paths['base'];?>/core/assets/codemirror/mode/javascript/javascript.js"></script>
+<script src="<?=$pre->node->paths['base'];?>/core/assets/codemirror/mode/css/css.js"></script>
+<script src="<?=$pre->node->paths['base'];?>/core/assets/codemirror/mode/clike/clike.js"></script>
+<script src="<?=$pre->node->paths['base'];?>/core/assets/codemirror/mode/php/php.js"></script>
+<script src="<?=$pre->node->paths['base'];?>/core/assets/codemirror/addon/display/fullscreen.js"></script>
+<script src="<?=$pre->node->paths['base'];?>/core/assets/codemirror/addon/selection/active-line.js"></script>
+
 <div class="sixteen columns">
-	<form action="<?=$pre->node->current_address;?>" method="post">
+	<form action="<?=$pre->node->current_address;?>" method="post" id="target">
 		<div class="sixteen columns dashing" style="margin:0 0 10px 0;">
 			<div class="eight columns">
 				<h3>Edit <?=$pre->edit_node->meta['title'];?></h3>
@@ -127,6 +136,9 @@ extraKeys: {
 	},
 	"Esc": function(cm) {
 		if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
+	},
+	"Ctrl-S": function(cm) {
+		$( "#target" ).submit();
 	}
 	}
 });
@@ -144,6 +156,9 @@ extraKeys: {
 	},
 	"Esc": function(cm) {
 		if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
+	},
+	"Ctrl-S": function(cm) {
+		$( "#target" ).submit();
 	}
 	}
 });
