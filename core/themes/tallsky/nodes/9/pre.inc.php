@@ -20,7 +20,7 @@ class pre extends node{
 			$this->modify_site($_POST['name'], $_POST['path'], $_POST['owner']);
 		}
 	}
-	function modify_site($s_name, $s_path, $s_owner){
+	private function modify_site($s_name, $s_path, $s_owner){
 		// check that all fields are not empty
 		if(empty($s_name) || empty($s_path) || empty($s_owner)){
 			$this->node->status_messages['error'][] =  "All fields are required.";
@@ -37,6 +37,16 @@ class pre extends node{
 				$this->node->status_messages['status'][] =  "Site directory was modified.";
 			}
 		}
+	}
+	public function get_files(){	
+		$dh  = opendir('sites/'.$this->s_path);
+		while (false !== ($filename = readdir($dh))) {
+			if($filename != '.' && $filename != '..' && !is_dir('sites/'.$this->s_path.'/'.$filename)){
+    			$files[] = $filename;
+			}
+		}
+		sort($files);
+		return $files;
 	}
 }
 ?>
