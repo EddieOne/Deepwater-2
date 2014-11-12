@@ -19,7 +19,7 @@
 <script src="<?=$pre->node->paths['base'];?>/core/assets/codemirror/addon/selection/active-line.js"></script>
 
 <div class="sixteen columns">
-	<form action="<?=$pre->node->current_address;?>" method="post" id="target">
+	<form action="<?=$pre->node->current_address;?>" method="post" name="edit_page" id="target">
 		<div class="sixteen columns dashing" style="margin:0 0 10px 0;">
 			<div class="eight columns">
 				<h3>Edit <?=$pre->edit_node->meta['title'];?></h3>
@@ -109,7 +109,7 @@
 		</div>
 		
 		<div class="sixteen columns">
-			<div><strong>Pre Page Code</strong> (Press F11 to view fullscreen)</div>
+			<div><strong>Pre Page Code</strong> (Press F11 to view fullscreen) <span class="template button">Class Template</span></div>
 			<p style="border:#aebfcf solid 1px;"><textarea id="pre_code" name="pre_code" ><?=$pre->en_pre;?></textarea></p>
 		</div>
 		
@@ -117,7 +117,6 @@
 			<div><strong>Page Code </strong>(Press F11 to view fullscreen)</div>
 			<p style="border:#aebfcf solid 1px;"><textarea id="page_code" name="page_code" ><?=htmlspecialchars($pre->en_page);?></textarea></p>
 		</div>
-		
 		<div class="offset-by-fourteen two columns"><input name="edit_page" type="submit" value="Modify" class="button" tabindex="6" /></div>
 	</form>
 </div>
@@ -158,7 +157,7 @@ extraKeys: {
 		if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
 	},
 	"Ctrl-S": function(cm) {
-		$( "#target" ).submit();
+		$("#target").submit();
 	}
 	}
 });

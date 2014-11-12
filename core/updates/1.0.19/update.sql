@@ -1,0 +1,2 @@
+INSERT INTO `nodes_roles` (`pid`, `nid`, `rid`, `auth`) VALUES (NULL, '21', '1', 'rw');
+INSERT INTO `nodes` (`nid`, `sid`, `vid`, `user_id`, `status`, `created`, `changed`, `type`, `alias_route`, `alias`, `options`, `title`, `description`, `keywords`) VALUES (21, 1, 0.002, 1, 1, 1415591927, 1415591927, 'core', 'admin', '/admin/site/modify-file/{site}/{file}/', '', 'Modify File', '', '');

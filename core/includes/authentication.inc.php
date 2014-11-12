@@ -133,8 +133,8 @@ class authentication extends navigator {
 		}
 		if($curHash == $hash){
 			$result = $this->execute("SELECT * FROM users WHERE user_id = ? AND token = ?", array($tuid, $token));
-			if(!$result){  $this->unset_login_cookie(); $this->redirect($this->current_address()); }
 			$row = $result->fetch(PDO::FETCH_OBJ);
+			if(empty($row)){ $this->unset_login_cookie(); $this->redirect($this->current_address()); }
 			$this->user_name = $row->user_name;
 			$this->name_slug = $row->name_slug;
 			$this->user_id = $row->user_id;

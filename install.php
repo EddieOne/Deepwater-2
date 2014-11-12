@@ -123,6 +123,7 @@ $dw_sql[] = "INSERT INTO `nodes` (`nid`, `sid`, `vid`, `user_id`, `status`, `cre
 (18, 1, 0.006, 1, 0, 1389250668, 1389250668, 'core', 'admin', '/admin/user/delete/{uid}/', '', 'Delete User', '', ''),
 (19, 1, 0.008, 1, 0, 1389245479, 1389245479, 'core', 'admin', '/admin/user/log/sort-by/{sort}/', '', 'User Log', '', ''),
 (20, 1, 0.030, 1, 0, 1391765430, 1391765430, 'core', 'admin', '/admin/update/', '', 'Update Deepwater', '', ''),
+(21, 1, 0.002, 1, 1, 1415591927, 1415591927, 'core', 'admin', '/admin/site/modify-file/{site}/{file}/', '', 'Modify File', '', ''),
 (1000, 1, 1.004, 1, 0, 1389137430, 1389137430, 'html', 'frontpage', '/frontpage/', '', 'Welcome to Deepwater', '', ''),
 (1001, 1, 1.100, 1, 1, 1388039909, 1388039909, 'default', '404', '/404/', '', 'Page Not Found', '', ''),
 (1002, 1, 0.002, 1, 0, 1389048810, 1389048810, 'default', 'access-denied', '/access-denied/', '', 'Access Denied ', '', '');";
@@ -158,11 +159,12 @@ $dw_sql[] = "INSERT INTO `nodes_roles` (`pid`, `nid`, `rid`, `auth`) VALUES
 (19, 18, 1, 'rw'),
 (20, 19, 1, 'rw'),
 (21, 20, 1, 'rw'),
-(22, 1000, 1, 'rw'),
-(23, 1000, 3, 'r'),
-(24, 1001, 3, 'r'),
-(25, 1001, 1, 'rw'),
-(26, 1002, 1, 'rw');";
+(22, 21, 1, 'rw'),
+(23, 1000, 1, 'rw'),
+(24, 1000, 3, 'r'),
+(25, 1001, 3, 'r'),
+(26, 1001, 1, 'rw'),
+(27, 1002, 1, 'rw');";
 
 $dw_sql[] = "CREATE TABLE IF NOT EXISTS `sites` (
   `sid` int(11) unsigned NOT NULL AUTO_INCREMENT,
