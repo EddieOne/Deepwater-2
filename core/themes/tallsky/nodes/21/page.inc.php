@@ -10,16 +10,17 @@
 <script src="<?=$pre->node->paths['base'];?>/core/assets/codemirror/addon/display/fullscreen.js"></script>
 <script src="<?=$pre->node->paths['base'];?>/core/assets/codemirror/addon/selection/active-line.js"></script>
 
-
-<form action="<?=$pre->node->current_address;?>" method="post" name="edit_page" id="target">
-	<input type="hidden" name="update_file" value="1">
-<div class="fourteen columns"><h3>Modify <?=$pre->filename;?></h3></div>
-	<div class="two columns"><input name="edit_file" type="submit" value="Modify" class="button" ></div>
 <div class="sixteen columns">
-	<p style="border:#aebfcf solid 1px;"><textarea id="file" name="file"><?=htmlspecialchars($pre->file);?></textarea></p>
-	<div class="offset-by-fourteen two columns"><input name="edit_file" type="submit" value="Modify" class="button" tabindex="2" ></div>
+	<form action="<?=$pre->node->current_address;?>" method="post" id="target">
+		<input type="hidden" name="update_file" value="1">
+		<div class="fourteen columns"><h3>Modify <?=$pre->filename;?></h3></div>
+		<div class="two columns"><input name="edit_file" type="submit" value="Modify" class="button" ></div>
+		<div class="sixteen columns">
+			<p style="border:#aebfcf solid 1px;"><textarea id="file" name="file"><?=htmlspecialchars($pre->file);?></textarea></p>
+			<div class="offset-by-fourteen two columns"><input name="edit_file" type="submit" value="Modify" class="button" tabindex="2" ></div>
+		</div>
+	</form>
 </div>
-</form>
 	
 <script>
 var editor = CodeMirror.fromTextArea(document.getElementById("file"), {
