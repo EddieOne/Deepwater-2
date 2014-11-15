@@ -76,6 +76,7 @@ class node extends authentication {
 			$paths['page'] = 'core/themes/'.self::$admin_theme.'/nodes/'.$nid.'/page.inc.php';
 		}
 		$paths['validation'] = 'core/includes/validation.inc.php';
+		$paths['emailer'] = 'core/includes/emailer.inc.php';
 		$paths['base'] = self::$base_url.self::$install_path;
 		return $paths;
 	}
