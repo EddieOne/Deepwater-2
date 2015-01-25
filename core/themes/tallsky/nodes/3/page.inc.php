@@ -19,7 +19,8 @@
 <script src="<?=$pre->node->paths['base'];?>/core/assets/codemirror/addon/selection/active-line.js"></script>
 
 <div class="sixteen columns">
-	<form action="<?=$pre->node->current_address;?>" method="post" name="edit_page" id="target">
+	<form action="<?=$pre->node->current_address;?>" method="post" id="target">
+		<input type="hidden" name="edit_page" value="1">
 		<div class="sixteen columns dashing" style="margin:0 0 10px 0;">
 			<div class="eight columns">
 				<h3>Edit <?=$pre->edit_node->meta['title'];?></h3>
@@ -109,7 +110,7 @@
 		</div>
 		
 		<div class="sixteen columns">
-			<div><strong>Pre Page Code</strong> (Press F11 to view fullscreen) <span class="template button">Class Template</span></div>
+			<div><strong>Pre Page Code</strong> (Press F11 to view fullscreen) <span class="pretemplate button">Class Template</span></div>
 			<p style="border:#aebfcf solid 1px;"><textarea id="pre_code" name="pre_code" ><?=$pre->en_pre;?></textarea></p>
 		</div>
 		
@@ -159,6 +160,16 @@ extraKeys: {
 	"Ctrl-S": function(cm) {
 		$("#target").submit();
 	}
+	}
+});
+$(".pretemplate").click(function() {
+	if(editor.getValue() == ''){
+		$.get( '<?=$pre->node->paths['base'];?>/core/file-templates/pre-class-template.html', function( data ) {
+			var decoded = $('<div/>').html(data).text();
+			editor.setValue(decoded);
+		});
+	}else{
+		$.jGrowl("Pre code must be empty to load the class template.", { life: 8000 });
 	}
 });
 </script>

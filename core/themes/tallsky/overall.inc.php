@@ -19,6 +19,8 @@ class overall extends node{
 		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
 	<link rel="shortcut icon" type="image/x-icon" href="<?=$node->paths['base'].'/'.$node->paths['site'];?>/favicon.ico?">
+	<script type="text/javascript" src="<?=$node->paths['base'];?>/core/assets/jquery/jquery-1.10.2.min.js"></script>
+	<script type="text/javascript" src="<?=$node->paths['base'];?>/core/assets/jgrowl/jquery.jgrowl.min.js"></script>
 </head>
 <body>
 	<div class="container">	
@@ -26,8 +28,6 @@ class overall extends node{
 		<? include 'nodes/'.$node->nid.'/page.inc.php'; ?>
 		<? include 'footer.inc.php'; ?>
 	</div>
-	<script type="text/javascript" src="<?=$node->paths['base'];?>/core/assets/jquery/jquery-1.10.2.min.js"></script>
-	<script type="text/javascript" src="<?=$node->paths['base'];?>/core/assets/jgrowl/jquery.jgrowl.min.js"></script>
 <?
 // status messages
 if(isset($_SESSION['status_messages'])){
@@ -40,13 +40,13 @@ if(!empty($node->status_messages)){
 		if(is_array($status)){
 			foreach($status as $sub_status){
 				if($key == 'admin'){
-					echo "$.jGrowl('$sub_status', { life: 4500, sticky: true });";
+					echo "$.jGrowl('$sub_status', { life: 8000, sticky: true });";
 				}else{
-					echo "$.jGrowl('$sub_status', { life: 4500 });";
+					echo "$.jGrowl('$sub_status', { life: 8000 });";
 				}
 			}
 		}else{
-			echo "$.jGrowl('$status', { life: 4500 });";
+			echo "$.jGrowl('$status', { life: 8000 });";
 		}
 	}
 	echo '</script>';

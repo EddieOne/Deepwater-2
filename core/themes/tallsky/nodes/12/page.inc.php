@@ -7,8 +7,22 @@
 	</div>
 	<h3>Core Reference</h3>
 	<link rel="stylesheet" href="<?=$pre->node->paths['base'];?>/core/assets/codemirror/lib/codemirror.css">
-	<script src="<?=$pre->node->paths['base'];?>/core/assets/codemirror/codemirror-compressed.js"></script>
-	<form>
+	<link rel="stylesheet" href="<?=$pre->node->paths['base'];?>/core/assets/codemirror/addon/display/fullscreen.css">
+	<link rel="stylesheet" href="<?=$pre->node->paths['base'];?>/core/assets/codemirror/addon/dialog/dialog.css">
+	<link rel="stylesheet" href="<?=$pre->node->paths['base'];?>/core/assets/codemirror/addon/search/matchesonscrollbar.css">
+	<script src="<?=$pre->node->paths['base'];?>/core/assets/codemirror/lib/codemirror.js"></script>
+	<script src="<?=$pre->node->paths['base'];?>/core/assets/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+	<script src="<?=$pre->node->paths['base'];?>/core/assets/codemirror/mode/xml/xml.js"></script>
+	<script src="<?=$pre->node->paths['base'];?>/core/assets/codemirror/mode/javascript/javascript.js"></script>
+	<script src="<?=$pre->node->paths['base'];?>/core/assets/codemirror/mode/css/css.js"></script>
+	<script src="<?=$pre->node->paths['base'];?>/core/assets/codemirror/mode/clike/clike.js"></script>
+	<script src="<?=$pre->node->paths['base'];?>/core/assets/codemirror/mode/php/php.js"></script>
+	<script src="<?=$pre->node->paths['base'];?>/core/assets/codemirror/addon/display/fullscreen.js"></script>
+	<script src="<?=$pre->node->paths['base'];?>/core/assets/codemirror/addon/selection/active-line.js"></script>
+	<script src="<?=$pre->node->paths['base'];?>/core/assets/codemirror/addon/dialog/dialog.js"></script>
+	<script src="<?=$pre->node->paths['base'];?>/core/assets/codemirror/addon/search/searchcursor.js"></script>
+	<script src="<?=$pre->node->paths['base'];?>/core/assets/codemirror/addon/search/search.js"></script>
+
 	<div class="eight columns add-bottom"><h6>pdo.inc.php</h6>
 		<textarea id="pdo" name="pdo" disabled><?=$pre->core['pdo'];?></textarea>
 	</div>
@@ -27,7 +41,7 @@
 	<div class="eight columns"><h6></h6>
 		
 	</div>
-	</form>
+
 </div>
 <script>
 	function viewer(id){
@@ -38,7 +52,18 @@
 		lineNumbers: true,
 		styleActiveLine: true,
 		readOnly: true,
-		enterMode: "keep"
+		enterMode: "keep",
+		extraKeys: {
+			"F11": function(cm) {
+				cm.setOption("fullScreen", !cm.getOption("fullScreen"));
+			},
+			"Esc": function(cm) {
+				if (cm.getOption("fullScreen")) cm.setOption("fullScreen", false);
+			},
+			"Ctrl-S": function(cm) {
+				$( "#target" ).submit();
+			}
+		}
     });
 }
 viewer('pdo');

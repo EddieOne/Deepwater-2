@@ -1,5 +1,5 @@
 		<div class="ten columns">
-			<h1>Deepwater CMS</h1>
+			<h1>Deepwater</h1>
 		</div>
 		
 		<div id="nav" class="six columns">

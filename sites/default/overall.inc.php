@@ -68,9 +68,9 @@ if(!empty($node->status_messages)){
 		if(is_array($status)){
 			foreach($status as $sub_status){
 				if($key == 'admin'){
-					echo "$.jGrowl('$sub_status', { life: 4500, sticky: true });";
+					echo "$.jGrowl('$sub_status', { life: 8000, sticky: true });";
 				}else{
-					echo "$.jGrowl('$sub_status', { life: 4500 });";
+					echo "$.jGrowl('$sub_status', { life: 8000 });";
 				}
 			}
 		}else{

@@ -96,7 +96,6 @@ class pre extends node{
 					$role_add_result = $this->node->execute("INSERT INTO nodes_roles SET nid = ?, rid = ?, auth = ?", array($this->enid, $key, $value));
 				}
 			}
-			$this->node->redirect($this->node->paths['base'].$_POST['alias'].'edit');
 			// error checking and status updates
 			if($node_result === false){
 				$this->status_messages['error'][] =  "The node query failed.";
@@ -110,8 +109,9 @@ class pre extends node{
 				$this->status_messages['error'][] =  "The page.php file failed to update.";
 			}
 			if(empty($this->status_messages['error'])){
-				$this->status_messages['status'][] =  "Page has been updated.";
+				$this->status_messages['error'][] =  "Page has been updated.";
 			}
+			$this->redirect($this->node->paths['base'].$_POST['alias'].'edit');
 		}
 	}
 	function role_html(){

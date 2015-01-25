@@ -37,7 +37,7 @@ if($step_num == 2){
 	// step 2 submit
 	if(!empty($_POST['user'])){
 		
-		$config = file_get_contents('core/install/config-template.inc.php');
+		$config = file_get_contents('core/file-templates/config-template.inc.php');
 
 		$search = array('%%host%%', '%%user%%', '%%pass%%', '%%name%%', '%%port%%', '%%salt%%', '%%base%%', '%%domain%%', '%%path%%', '%%?%%');
 		$replace = array($_POST['host'], $_POST['user'], $_POST['pass'], $_POST['name'], $_POST['port'], $_POST['salt'], $_POST['base'], $_POST['domain'], $_POST['path'], '?');
@@ -105,7 +105,7 @@ $dw_sql[] = "CREATE TABLE IF NOT EXISTS `nodes` (
 $dw_sql[] = "INSERT INTO `nodes` (`nid`, `sid`, `vid`, `user_id`, `status`, `created`, `changed`, `type`, `alias_route`, `alias`, `options`, `title`, `description`, `keywords`) VALUES
 (1, 1, 1.007, 1, 0, 1389085059, 1389085059, 'core', 'admin', '/admin/page/new/', '', 'New Page', '', ''),
 (2, 1, 1.009, 1, 0, 1389104903, 1389104903, 'core', 'admin', '/admin/user/login/', '', 'Admin Login', '', ''),
-(3, 1, 1.001, 1, 0, 1388645558, 1388645558, 'core', 'admin', '/admin/page/editor/', '', 'Edit Page', '', ''),
+(3, 1, 1.001, 1, 0, 1388645558, 1388645558, 'core', 'admin', '/admin/page/editor/', '', 'Editor', '', ''),
 (4, 1, 1.004, 1, 0, 1389006369, 1389006369, 'core', 'admin', '/admin/', '', 'Admin Control Panel', '', ''),
 (5, 1, 0.051, 1, 0, 1389136446, 1389136446, 'core', 'admin', '/admin/page/', '', 'View Pages', '', ''),
 (6, 1, 0.022, 1, 0, 1389071628, 1389071628, 'core', 'admin', '/admin/site/', '', 'View Sites', '', ''),
@@ -124,6 +124,7 @@ $dw_sql[] = "INSERT INTO `nodes` (`nid`, `sid`, `vid`, `user_id`, `status`, `cre
 (19, 1, 0.008, 1, 0, 1389245479, 1389245479, 'core', 'admin', '/admin/user/log/sort-by/{sort}/', '', 'User Log', '', ''),
 (20, 1, 0.030, 1, 0, 1391765430, 1391765430, 'core', 'admin', '/admin/update/', '', 'Update Deepwater', '', ''),
 (21, 1, 0.002, 1, 1, 1415591927, 1415591927, 'core', 'admin', '/admin/site/modify-file/{site}/{file}/', '', 'Modify File', '', ''),
+(22, 1, 0.001, 1, 1, 1422149352, 1422149352, 'core', 'admin', '/admin/crontab/', '', 'Crontab', '', ''),
 (1000, 1, 1.004, 1, 0, 1389137430, 1389137430, 'html', 'frontpage', '/frontpage/', '', 'Welcome to Deepwater', '', ''),
 (1001, 1, 1.100, 1, 1, 1388039909, 1388039909, 'default', '404', '/404/', '', 'Page Not Found', '', ''),
 (1002, 1, 0.002, 1, 0, 1389048810, 1389048810, 'default', 'access-denied', '/access-denied/', '', 'Access Denied ', '', '');";
@@ -160,11 +161,12 @@ $dw_sql[] = "INSERT INTO `nodes_roles` (`pid`, `nid`, `rid`, `auth`) VALUES
 (20, 19, 1, 'rw'),
 (21, 20, 1, 'rw'),
 (22, 21, 1, 'rw'),
-(23, 1000, 1, 'rw'),
-(24, 1000, 3, 'r'),
-(25, 1001, 3, 'r'),
-(26, 1001, 1, 'rw'),
-(27, 1002, 1, 'rw');";
+(23, 22, 1, 'rw'),
+(24, 1000, 1, 'rw'),
+(25, 1000, 3, 'r'),
+(26, 1001, 3, 'r'),
+(27, 1001, 1, 'rw'),
+(28, 1002, 1, 'rw');";
 
 $dw_sql[] = "CREATE TABLE IF NOT EXISTS `sites` (
   `sid` int(11) unsigned NOT NULL AUTO_INCREMENT,

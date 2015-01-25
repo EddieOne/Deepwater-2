@@ -1,0 +1,3 @@
+INSERT INTO `nodes_roles` (`pid`, `nid`, `rid`, `auth`) VALUES (NULL, '22', '1', 'rw');
+INSERT INTO `nodes` (`nid`, `sid`, `vid`, `user_id`, `status`, `created`, `changed`, `type`, `alias_route`, `alias`, `options`, `title`, `description`, `keywords`) VALUES ('22', '1', '0.001', '1', '1', '1422149352', '1422149352', 'core', 'admin', '/admin/crontab/', '', 'Crontab', '', '');
+UPDATE `nodes` SET `title` = 'Editor' WHERE `nodes`.`nid` =3;
