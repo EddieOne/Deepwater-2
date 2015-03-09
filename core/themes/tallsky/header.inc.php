@@ -3,6 +3,7 @@
 				<ul>
 					<li><a href="<?=$node->paths['base'];?>/admin/" >Home</a></li>
 					<li><a href="<?=$node->paths['base'];?>/admin/site/" >Sites</a></li>
+					<li><a href="<?=$node->paths['base'];?>/admin/plugin/" >Plugins</a></li>
 					<li><a href="<?=$node->paths['base'];?>/admin/page/" >Pages</a></li>
 					<li><a href="<?=$node->paths['base'];?>/admin/user/" >Users</a></li>
 				</ul>

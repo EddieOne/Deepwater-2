@@ -306,9 +306,8 @@ class authentication extends navigator {
 	}
 	function get_role_id($role_name){
 		$result = $this->execute("SELECT * FROM defined_roles WHERE name = ? LIMIT 1", array($role_name));
-		while($row = $result->fetch()){
-			$rid = $row['rid'];
-		}
+		$row = $result->fetch();
+		return $row['rid'];
 	}
 	// see if a user has a role
 	function user_has_role($uid,$role_name){

@@ -76,6 +76,7 @@ class node extends authentication {
 			$paths['page'] = 'core/themes/'.self::$admin_theme.'/nodes/'.$nid.'/page.inc.php';
 		}
 		$paths['validation'] = 'core/includes/validation.inc.php';
+		$paths['filesystem'] = 'core/includes/filesystem.inc.php';
 		$paths['emailer'] = 'core/includes/emailer.inc.php';
 		$paths['base'] = self::$base_url.self::$install_path;
 		return $paths;
@@ -91,9 +92,16 @@ class node extends authentication {
 		if(!$result){
 			return false;	
 		}
-		while($row = $result->fetch()){
-			return $row['nid'];
+		$row = $result->fetch();
+		return $row['nid'];
+	}
+	public function nid_from_simple_alias($alias){
+		$result = $this->execute("SELECT nid,alias FROM nodes WHERE alias = ? LIMIT 1", array($alias));
+		if(!$result){
+			return false;	
 		}
+		$row = $result->fetch();
+		return $row['nid'];
 	}
 	function nid_from_alias($route, $parts, $alias, $count){
 		$result = $this->execute("SELECT nid,alias_route,alias FROM nodes WHERE alias_route = ?", array($route));

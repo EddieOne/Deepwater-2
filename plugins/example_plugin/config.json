@@ -1,0 +1,9 @@
+{
+	"name": "Testimonial Example Plugin",
+	"name_slug": "example_plugin",
+	"version": "0.0.1",
+	"description": "Simple testimonials plugin for Deepwater.",
+	"author": "onefoldmedia",
+	"link": "http://onefoldmedia.com/",
+	"created": 1425779191
+}

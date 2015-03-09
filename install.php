@@ -56,7 +56,7 @@ $dw_sql[] = "CREATE TABLE IF NOT EXISTS `banned` (
   `expire` int(11) unsigned NOT NULL COMMENT 'When to remove the ban.',
   PRIMARY KEY (`pid`),
   KEY `ip` (`ip`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;";
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;";
 
 $dw_sql[] = "CREATE TABLE IF NOT EXISTS `defined_roles` (
   `rid` int(8) NOT NULL AUTO_INCREMENT,
@@ -64,7 +64,7 @@ $dw_sql[] = "CREATE TABLE IF NOT EXISTS `defined_roles` (
   `weight` int(3) NOT NULL,
   PRIMARY KEY (`rid`),
   KEY `name` (`name`,`weight`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;";
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;";
 
 $dw_sql[] = "INSERT INTO `defined_roles` (`rid`, `name`, `weight`) VALUES
 (1, 'admin', 1),
@@ -80,7 +80,7 @@ $dw_sql[] = "CREATE TABLE IF NOT EXISTS `flood_watch` (
   PRIMARY KEY (`fid`),
   KEY `time` (`time`,`expire`,`event`),
   KEY `ip` (`ip`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;";
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;";
 
 $dw_sql[] = "CREATE TABLE IF NOT EXISTS `nodes` (
   `nid` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Node id.',
@@ -100,7 +100,7 @@ $dw_sql[] = "CREATE TABLE IF NOT EXISTS `nodes` (
   PRIMARY KEY (`nid`),
   KEY `type` (`type`,`user_id`,`created`,`alias_route`),
   KEY `sid` (`sid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COMMENT='Nodes are useally pages. Sometimes nodes are used as parts of other nodes.' AUTO_INCREMENT=1003 ;";
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Nodes are useally pages. Sometimes nodes are used as parts of other nodes.' AUTO_INCREMENT=1003 ;";
 
 $dw_sql[] = "INSERT INTO `nodes` (`nid`, `sid`, `vid`, `user_id`, `status`, `created`, `changed`, `type`, `alias_route`, `alias`, `options`, `title`, `description`, `keywords`) VALUES
 (1, 1, 1.007, 1, 0, 1389085059, 1389085059, 'core', 'admin', '/admin/page/new/', '', 'New Page', '', ''),
@@ -125,6 +125,8 @@ $dw_sql[] = "INSERT INTO `nodes` (`nid`, `sid`, `vid`, `user_id`, `status`, `cre
 (20, 1, 0.030, 1, 0, 1391765430, 1391765430, 'core', 'admin', '/admin/update/', '', 'Update Deepwater', '', ''),
 (21, 1, 0.002, 1, 1, 1415591927, 1415591927, 'core', 'admin', '/admin/site/modify-file/{site}/{file}/', '', 'Modify File', '', ''),
 (22, 1, 0.001, 1, 1, 1422149352, 1422149352, 'core', 'admin', '/admin/crontab/', '', 'Crontab', '', ''),
+(23, 1, 0.001, 1, 1, 1425773388, 1425773388, 'core', 'admin', '/admin/plugin/', '', 'Plugins', '', ''),
+(24, 1, 0.001, 1, 1, 1425773388, 1425773388, 'core', 'admin', '/admin/plugin/do/{action}/{name_slug}/', '', 'Plugin Action', '', ''),
 (1000, 1, 1.004, 1, 0, 1389137430, 1389137430, 'html', 'frontpage', '/frontpage/', '', 'Welcome to Deepwater', '', ''),
 (1001, 1, 1.100, 1, 1, 1388039909, 1388039909, 'default', '404', '/404/', '', 'Page Not Found', '', ''),
 (1002, 1, 0.002, 1, 0, 1389048810, 1389048810, 'default', 'access-denied', '/access-denied/', '', 'Access Denied ', '', '');";
@@ -136,7 +138,7 @@ $dw_sql[] = "CREATE TABLE IF NOT EXISTS `nodes_roles` (
   `auth` varchar(2) NOT NULL COMMENT 'Permission. r =  read, w = write, rw = both',
   PRIMARY KEY (`pid`),
   KEY `nid` (`nid`,`rid`,`auth`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=26 ;";
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=26 ;";
 
 $dw_sql[] = "INSERT INTO `nodes_roles` (`pid`, `nid`, `rid`, `auth`) VALUES
 (1, 1, 1, 'rw'),
@@ -162,11 +164,13 @@ $dw_sql[] = "INSERT INTO `nodes_roles` (`pid`, `nid`, `rid`, `auth`) VALUES
 (21, 20, 1, 'rw'),
 (22, 21, 1, 'rw'),
 (23, 22, 1, 'rw'),
-(24, 1000, 1, 'rw'),
-(25, 1000, 3, 'r'),
-(26, 1001, 3, 'r'),
-(27, 1001, 1, 'rw'),
-(28, 1002, 1, 'rw');";
+(24, 23, 1, 'rw'),
+(25, 24, 1, 'rw'),
+(26, 1000, 1, 'rw'),
+(27, 1000, 3, 'r'),
+(28, 1001, 3, 'r'),
+(29, 1001, 1, 'rw'),
+(30, 1002, 1, 'rw');";
 
 $dw_sql[] = "CREATE TABLE IF NOT EXISTS `sites` (
   `sid` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -175,7 +179,7 @@ $dw_sql[] = "CREATE TABLE IF NOT EXISTS `sites` (
   `site_path` varchar(50) NOT NULL,
   PRIMARY KEY (`sid`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;";
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;";
 
 $dw_sql[] = "INSERT INTO `sites` (`sid`, `user_id`, `site_name`, `site_path`) VALUES
 (1, 1, 'Default', 'default');";
@@ -196,7 +200,7 @@ $dw_sql[] = "CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `name_slug` (`name_slug`),
   KEY `mail` (`mail`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;";
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;";
 
 $dw_sql[] = "CREATE TABLE IF NOT EXISTS `users_roles` (
   `pid` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Primary id.',
@@ -204,7 +208,7 @@ $dw_sql[] = "CREATE TABLE IF NOT EXISTS `users_roles` (
   `rid` int(11) unsigned NOT NULL COMMENT 'The role id that the user has or belongs to.',
   PRIMARY KEY (`pid`),
   KEY `user_id` (`user_id`,`rid`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;";
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;";
 
 $dw_sql[] = "CREATE TABLE IF NOT EXISTS `user_log` (
   `lid` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -218,7 +222,17 @@ $dw_sql[] = "CREATE TABLE IF NOT EXISTS `user_log` (
   PRIMARY KEY (`lid`),
   KEY `update` (`ip`,`identity`),
   KEY `sorting` (`views`,`start`,`end`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;";
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;";
+
+$dw_sql[] = "CREATE TABLE IF NOT EXISTS `plugins` (
+  `pid` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'plugin id',
+  `name` varchar(100) NOT NULL COMMENT 'name from plugin config',
+  `name_slug` varchar(100) NOT NULL COMMENT 'the directory that plugin resides in',
+  `version` varchar(10) NOT NULL COMMENT 'version of plugin from config',
+  `installed` tinyint(2) unsigned NOT NULL COMMENT '1 = installed, 0 = not installed',
+  `date` int(13) unsigned NOT NULL COMMENT 'unix time installed',
+  PRIMARY KEY (`pid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;";
 		
 			include_once 'core/includes/pdo.inc.php';
 			$db = new pdo_db();

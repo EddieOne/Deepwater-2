@@ -125,6 +125,7 @@ class pre extends node{
     		}
 		}
 	}
+	// TODO replace with filesystem unzip
 	private function unzip($zip_file, $destination){
 		$zip = new ZipArchive;
 		if ($zip->open($zip_file) === TRUE) {
@@ -199,7 +200,7 @@ class pre extends node{
 		}
 		return $response;
 	}
-	// read sql line by line and strip comments. Returns a string 
+	// TODO replace with pdi.inc.php
 	public function read_sql_file($sql_file){
 		// read sql line by line to save memory
 		$handle = @fopen($sql_file, "r");
