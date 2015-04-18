@@ -112,6 +112,40 @@ class authentication extends navigator {
 		$this->redirect($frompage);
 		return true;
 	}
+	public function login_silent($email,$password){
+		if(empty($email)){
+			return false;
+		}
+		if(empty($password)){
+			return false;
+		}
+		if(!$this->check_flood(3,"login")){
+			return false;
+		}
+		$hashpass = hash('tiger192,3', $this->hash_salt.$password);
+		$result = $this->execute("SELECT * FROM users WHERE mail = ? AND user_pass = ?", array($email, $hashpass));
+		$user = $result->fetch(PDO::FETCH_OBJ);
+		if(!$user){
+			$this->add_flood("login",3600);
+			return false;
+		}
+		
+		$this->user_name = $user->user_name;
+		$this->name_slug = $user->name_slug;
+		$this->user_id = $user->user_id;
+		$this->token = $this->create_token();
+		$_SESSION['user_name'] = $user->user_name;;
+		$_SESSION['name_slug'] = $user->name_slug;
+		$_SESSION['user_id'] = $user->user_id;
+		$_SESSION['token'] = $this->token;
+		$this->set_login_cookie();
+		if($user->status == 3){
+			$result = $this->execute("UPDATE users SET accessed = ?, token = ?, status = 2 WHERE user_id = ?", array($this->time, $this->token, $this->user_id));
+		}else{
+			$result = $this->execute("UPDATE users SET accessed = ?, token = ? WHERE user_id = ?", array($this->time, $this->token, $this->user_id));
+		}
+		return true;
+	}
 	public function cookie_login($token){
 		include_once 'validation.inc.php';
 		if(!$this->check_flood(3,"login")){
@@ -168,7 +202,7 @@ class authentication extends navigator {
 		setrawcookie("token", '', time() - 42000, '/', '', false, true);
 	}
 	public function logout_user(){
-		$result = $this->execute("UPDATE users SET token = ? WHERE user_id = ?", array('', $_SESSION['user_id']));
+		$result = $this->execute("UPDATE users SET token = ? WHERE user_id = ?", array(NULL, $this->user_id));
 		$this->user_name = 'Guest'; // username
 		$this->name_slug = 'guest'; // lower case, spaces to underscores
 		$this->user_id = false;
