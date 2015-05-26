@@ -347,7 +347,8 @@ class authentication extends navigator {
 	function user_has_role($uid,$role_name){
 		$rid = $this->get_role_id($role_name);
 		$result = $this->execute("SELECT * FROM users_roles WHERE user_id = ? AND rid = ? LIMIT 1", array($uid, $rid));
-		if(!$result){
+		$row = $result->fetch();
+		if(empty($row)){
 			return false;	
 		}else{
 			return true;
