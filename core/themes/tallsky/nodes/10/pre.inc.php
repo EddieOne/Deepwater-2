@@ -25,7 +25,7 @@ class pre extends node{
 	}
 	private function rrmdir($dir){ 
   		foreach(glob($dir . '/*') as $file){ 
-    		if(is_dir($file)) rrmdir($file); else unlink($file); 
+    		if(is_dir($file)) $this->rrmdir($file); else unlink($file); 
 		}
   	}
 }
