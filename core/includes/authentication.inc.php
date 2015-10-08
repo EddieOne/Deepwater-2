@@ -283,6 +283,9 @@ class authentication extends navigator {
 				$role[] = $row['rid'];
 			}
 		}
+		if(!isset($role)){
+			$role[] = 3;
+		}
 		return $role;
 	}
 	function get_role_name($rid){
