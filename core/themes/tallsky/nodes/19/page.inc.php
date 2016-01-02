@@ -9,14 +9,13 @@
 	
 	<div class="sixteen columns">
 	<h3>User Log</h3>
-		<div class="three columns"><strong>IP Address</strong></div>
+		<div class="two columns"><strong>IP Address</strong></div>
 		<div class="one columns"><strong>Roles</strong></div>
-		<div class="one columns"><strong>Identity</strong></div>
-		<div class="five columns" style="overflow:hidden;"><strong>Last Page</strong></div>
-		<div class="one column"><strong>Views</strong></div>
+		<div class="two columns"><strong>Identity</strong></div>
+		<div class="five columns"><strong>Last Page</strong></div>
+		<div class="two column"><strong>Views</strong></div>
 		<div class="two columns"><strong>Appeared</strong></div>
 		<div class="two columns"><strong>Last Visit</strong></div>
-		<div class="three columns"> </div>
 		<?=$pre->ulist;?>
 
 	</div>
