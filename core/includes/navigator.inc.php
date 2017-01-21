@@ -35,29 +35,23 @@ class navigator extends pdo_db {
 	}
 	
 	function current_address(){
-		$pageURL = 'http';
-		if(isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on") {$pageURL .= "s";}
-		$pageURL .= "://";
-		if($_SERVER["SERVER_PORT"] != "80"){
-			$pageURL .= $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
-		}else{
-			$pageURL .= $_SERVER["SERVER_NAME"].$_SERVER["REQUEST_URI"];
-		}
-		return $pageURL;
+		return "http" . (($_SERVER['SERVER_PORT'] == 443) ? "s://" : "://") . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+
 	}
 	function get_alias($address){
-		$alias = $address;
 		// ip support
 		$directAddress = 'http://'.$_SERVER['SERVER_ADDR'].'/';
-		$alias = str_replace($directAddress,"",$alias);
-		// ssl support
-		$ssl_url = str_replace("http://","https://",self::$base_url);
-		$ssl_url = substr_replace($ssl_url ,"",-1);
-		$ssl_url = $ssl_url.':443/';
-		$alias = str_replace($ssl_url,"",$alias);
-		// http support
-		$alias = str_replace(self::$install_path, '', $alias);
-		$alias = str_replace(self::$base_url.'/','',$alias);
+		$alias = str_replace($directAddress,"",$address);
+		// http, https support
+		$alias = str_replace("http://","", $alias);
+		$alias = str_replace("https://","", $alias);
+		$alias = str_replace(":443", "", $alias);
+		$alias = rtrim($alias, "/");
+		$parts = explode("/", $alias);
+		$parts = array_slice($parts, 1);
+		$alias = implode("/", $parts);
+		$alias = ltrim($alias, "/");
+
 		return $alias;
 	}
 	function get_alias_array($alias){

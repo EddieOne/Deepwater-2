@@ -37,12 +37,6 @@ class authentication extends navigator {
 			echo self::offline_message;
 			exit();
 		}
-		// adjust base_url if user is using ssl
-		if($_SERVER['SERVER_PORT'] == '443'){
-			$ssl_url = str_replace("http://","https://",$base_url);
-			$ssl_url = $ssl_url.':443/';
-			$this->base_url = $ssl_url;
-		}
 		// Check to see if the user ip is banned
 		if(!isset($_SESSION['banned'])){
 			$this->banned = $this->ban_check($this->user_ip);	
